@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Coastal Seahorse Watch — Seahorse Spotter Citizen Science</title>
+  <style>
+    :root {
+      --marine-deep: #06425c;
+      --lagoon-teal: #0f7a7c;
+      --aqua-ripple: #46b3b9;
+      --sky-card: #cdebf0;
+      --sand-bg: #f6f2ea;
+      --sand-border: #dfd6c7;
+      --seahorse-gold: #f4b41a;
+      --seahorse-gold-hover: #fde02f;
+      --text-ink: #1e2f38;
+      --text-muted: #4b616c;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-ink);
+      background-color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--marine-deep);
+      border-bottom: 2px solid var(--lagoon-teal);
+      padding: 0.9rem 2rem;
+      box-shadow: 0 4px 18px rgba(6, 66, 92, 0.25);
+    }
+
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+    }
+
+    .brand-title span {
+      color: var(--seahorse-gold);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #e0f4f5;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.48rem 0.95rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .nav-btn:hover {
+      background-color: rgba(70, 179, 185, 0.22);
+      color: var(--white);
+    }
+
+    .nav-btn.active {
+      background-color: var(--seahorse-gold);
+      color: var(--marine-deep);
+      font-weight: 700;
+    }
+
+    .nav-badge {
+      background-color: rgba(255, 255, 255, 0.12);
+      color: #cdebf0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid rgba(205, 235, 240, 0.3);
+    }
+
+    /* Multi-Page Views */
+    .page-view {
+      display: none;
+      animation: fadeIn 0.28s ease;
+    }
+
+    .page-view.active-page {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero Banner using Coastal Photo IMG_0418 */
+    .hero-banner {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(6, 66, 92, 0.68) 0%, rgba(15, 122, 124, 0.58) 60%, rgba(6, 66, 92, 0.86) 100%),
+        url('IMG_0418.jpg') center/cover no-repeat,
+        url('IMG_0418.JPG') center/cover no-repeat,
+        url('https://upload.wikimedia.org/wikipedia/commons/3/34/Hippocampus_erectus_NOAA.jpg') center/cover no-repeat;
+      color: var(--white);
+      padding: 5.5rem 2rem 6.5rem;
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      display: inline-block;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--seahorse-gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-banner h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .hero-banner p {
+      font-size: 1.05rem;
+      color: #eaf7f8;
+      max-width: 720px;
+      margin: 0 auto 1.85rem;
+    }
+
+    /* Buttons */
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background-color: var(--seahorse-gold);
+      color: var(--marine-deep);
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 0.7rem 1.55rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.16s ease;
+    }
+
+    .btn-gold:hover {
+      background-color: var(--seahorse-gold-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-teal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background-color: var(--lagoon-teal);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.86rem;
+      padding: 0.65rem 1.35rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.16s ease;
+    }
+
+    .btn-teal:hover {
+      background-color: var(--marine-deep);
+    }
+
+    .btn-outline-light {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background-color: rgba(6, 66, 92, 0.55);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 0.68rem 1.45rem;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .btn-outline-light:hover {
+      background-color: var(--white);
+      color: var(--marine-deep);
+    }
+
+    /* Project Seahorse-Style Stacked Clickable Photo Navigation Cards */
+    .stacked-cards-section {
+      max-width: 1180px;
+      margin: -3.5rem auto 0;
+      padding: 0 2rem 4.5rem;
+      position: relative;
+      z-index: 20;
+    }
+
+    .stacked-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.75rem;
+    }
+
+    .stack-card {
+      cursor: pointer;
+      transition: transform 0.22s ease;
+    }
+
+    .stack-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .stack-photo-frame {
+      position: relative;
+      padding-top: 12px;
+      padding-right: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .stack-photo-frame::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(100% - 12px);
+      height: calc(100% - 12px);
+      background-color: var(--sky-card);
+      border: 1px solid #b5dfe6;
+      z-index: 1;
+      transition: background-color 0.2s ease;
+    }
+
+    .stack-card:hover .stack-photo-frame::before {
+      background-color: var(--seahorse-gold);
+    }
+
+    .stack-photo-frame img {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 205px;
+      object-fit: cover;
+      display: block;
+      box-shadow: 0 8px 20px rgba(6, 66, 92, 0.18);
+      background-color: var(--lagoon-teal);
+    }
+
+    .stack-card h3 {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--marine-deep);
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stack-card p {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Section Containers */
+    .content-wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .sand-band {
+      background-color: var(--sand-bg);
+      border-top: 1px solid var(--sand-border);
+      border-bottom: 1px solid var(--sand-border);
+    }
+
+    .section-heading {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--marine-deep);
+      margin-bottom: 0.35rem;
+    }
+
+    .section-sub {
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--lagoon-teal);
+      margin-bottom: 1.75rem;
+      display: block;
+    }
+
+    /* 5-Column Slide-Accurate Blue/Teal Info Strip */
+    .five-info-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .info-box {
+      background: linear-gradient(165deg, var(--marine-deep) 0%, var(--lagoon-teal) 100%);
+      color: var(--white);
+      padding: 1.5rem 1.25rem;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 6px 16px rgba(6, 66, 92, 0.14);
+    }
+
+    .info-box h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--seahorse-gold);
+      margin-bottom: 0.55rem;
+    }
+
+    .info-box p {
+      font-size: 0.83rem;
+      color: #eaf7f8;
+      line-height: 1.52;
+    }
+
+    /* Two-Column Feature Layout */
+    .two-col-split {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .collage-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      position: relative;
+    }
+
+    .collage-2x2 img {
+      width: 100%;
+      height: 195px;
+      object-fit: cover;
+      border-radius: 6px;
+      box-shadow: 0 6px 16px rgba(6, 66, 92, 0.15);
+      background-color: var(--lagoon-teal);
+    }
+
+    /* Cards & Grids */
+    .cards-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .cards-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.75rem;
+    }
+
+    .clean-card {
+      background: var(--white);
+      border: 1px solid var(--sand-border);
+      border-top: 4px solid var(--lagoon-teal);
+      border-radius: 6px;
+      padding: 1.65rem;
+      box-shadow: 0 4px 14px rgba(6, 66, 92, 0.06);
+    }
+
+    .clean-card h3 {
+      font-size: 1.14rem;
+      color: var(--marine-deep);
+      margin-bottom: 0.6rem;
+    }
+
+    .clean-card p, .clean-card li {
+      font-size: 0.89rem;
+      color: var(--text-muted);
+      line-height: 1.58;
+    }
+
+    .clean-card ul {
+      padding-left: 1.15rem;
+    }
+
+    /* SMART Metrics Banner */
+    .smart-banner {
+      background: linear-gradient(120deg, var(--marine-deep), var(--lagoon-teal));
+      color: var(--white);
+      border-radius: 8px;
+      padding: 2.5rem;
+      margin: 2rem 0;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .smart-numbers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .smart-pill {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 1rem;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .smart-pill strong {
+      display: block;
+      font-size: 1.75rem;
+      color: var(--seahorse-gold);
+      line-height: 1.1;
+    }
+
+    .smart-pill span {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Interactive Seahorse Spotter & Spreadsheet */
+    .goal-card {
+      background: var(--white);
+      border: 1px solid var(--sand-border);
+      border-radius: 6px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .goal-head {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--marine-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .goal-bar-bg {
+      width: 100%;
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .goal-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--lagoon-teal), var(--aqua-ripple), var(--seahorse-gold));
+      width: 1.7%;
+      transition: width 0.35s ease;
+    }
+
+    .spotter-layout {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .form-group {
+      margin-bottom: 0.85rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--marine-deep);
+      margin-bottom: 0.25rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.52rem 0.7rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      font-family: inherit;
+    }
+
+    .form-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+
+    .upload-box {
+      border: 2px dashed var(--aqua-ripple);
+      background: #f0fafa;
+      padding: 0.9rem;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    #photoPreview {
+      max-width: 100%;
+      max-height: 145px;
+      margin-top: 0.6rem;
+      display: none;
+      border-radius: 4px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--sand-border);
+      border-radius: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--marine-deep);
+      color: var(--white);
+      padding: 0.72rem 0.8rem;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.72rem 0.8rem;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: middle;
+    }
+
+    .thumb-img {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 4px;
+      background-color: var(--lagoon-teal);
+    }
+
+    .stage-pill {
+      display: inline-block;
+      padding: 0.22rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .s-1 { background: #fef3c7; color: #92400e; }
+    .s-2 { background: #cdebf0; color: #06425c; }
+    .s-3 { background: #dcfce7; color: #166534; }
+
+    /* Coastal Field Sites 9-Photo Gallery */
+    .gallery-9 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .gallery-item {
+      background: var(--white);
+      border: 1px solid var(--sand-border);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(6, 66, 92, 0.08);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 195px;
+      object-fit: cover;
+      display: block;
+      background-color: var(--lagoon-teal);
+    }
+
+    .gallery-item figcaption {
+      padding: 0.85rem;
+      font-size: 0.82rem;
+      color: var(--text-ink);
+    }
+
+    .gallery-item figcaption strong {
+      display: block;
+      color: var(--marine-deep);
+      margin-bottom: 0.15rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--marine-deep);
+      color: var(--white);
+      padding: 3.5rem 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 1.2fr 1.2fr;
+      gap: 2.5rem;
+    }
+
+    footer h4 {
+      color: var(--seahorse-gold);
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+    }
+
+    footer p, footer li {
+      font-size: 0.84rem;
+      color: #d9f0f2;
+      line-height: 1.6;
+    }
+
+    footer ul {
+      list-style: none;
+    }
+
+    footer li {
+      margin-bottom: 0.4rem;
+    }
+
+    @media (max-width: 980px) {
+      .stacked-grid,
+      .five-info-grid,
+      .two-col-split,
+      .cards-3,
+      .cards-2,
+      .smart-banner,
+      .spotter-layout,
+      .gallery-9,
+      .footer-inner {
+        grid-template-columns: 1fr;
+      }
+      .smart-numbers {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="nav-inner">
+      <a class="brand-title" onclick="switchPage('home')">The Coastal <span>Seahorse</span> Watch</a>
+      <nav class="nav-links">
+        <button class="nav-btn active" data-page="home" onclick="switchPage('home')">Home</button>
+        <button class="nav-btn" data-page="foundation" onclick="switchPage('foundation')">Project Seahorse</button>
+        <button class="nav-btn" data-page="initiative" onclick="switchPage('initiative')">Initiative &amp; Goals</button>
+        <button class="nav-btn" data-page="spotter" onclick="switchPage('spotter')">Seahorse Spotter</button>
+        <button class="nav-btn" data-page="impact" onclick="switchPage('impact')">Data, Impact &amp; Sites</button>
+      </nav>
+      <div class="nav-badge">100% Free Citizen Science</div>
+    </div>
+  </header>
+
+  <!-- ==================== PAGE 1: HOME ==================== -->
+  <main id="page-home" class="page-view active-page">
+    <section class="hero-banner">
+      <div class="hero-inner">
+        <span class="hero-kicker">Youth Adaptation: Seahorse Spotter &bull; Project Seahorse Framework</span>
+        <h1>The Coastal Seahorse Watch</h1>
+        <p>
+          Empowering coastal communities, youth advocates, and volunteer divers to monitor fragile shallow-water habitats, map seagrass meadows, and drive community-led marine conservation policy.
+        </p>
+        <div style="display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn-gold" onclick="switchPage('spotter')">Log a Seahorse Sighting</button>
+          <button class="btn-outline-light" onclick="switchPage('foundation')">Explore Project Seahorse Roots</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Seahorse-Style Clickable Stacked Photo Cards -->
+    <section class="stacked-cards-section">
+      <div class="stacked-grid">
+        <div class="stack-card" onclick="switchPage('foundation')">
+          <div class="stack-photo-frame">
+            <img data-local="IMG_0265" data-fallback="https://upload.wikimedia.org/wikipedia/commons/3/34/Hippocampus_erectus_NOAA.jpg" alt="Coastal cove habitat" />
+          </div>
+          <h3>Project Seahorse <span>&rarr;</span></h3>
+          <p>Founded in 1996 by Dr. Amanda Vincent &amp; Dr. Heather Koldewey (UBC &amp; ZSL), 35+ MPAs, and the iSeahorse platform.</p>
+        </div>
+
+        <div class="stack-card" onclick="switchPage('initiative')">
+          <div class="stack-photo-frame">
+            <img data-local="IMG_0432" data-fallback="https://upload.wikimedia.org/wikipedia/commons/b/b1/Hippocampus_ingens_NOAA.jpg" alt="Coastal headland overlook" />
+          </div>
+          <h3>Initiative &amp; Goals <span>&rarr;</span></h3>
+          <p>SMART targets (150 divers, 300 sightings, 5 pilot sites), 10-year MPA horizon, risk mitigation, and youth outreach.</p>
+        </div>
+
+        <div class="stack-card" onclick="switchPage('spotter')">
+          <div class="stack-photo-frame">
+            <img data-local="IMG_0458" data-fallback="https://upload.wikimedia.org/wikipedia/commons/1/1d/Hippocampus_reidi_2.jpg" alt="Sunlit shallow turquoise water" />
+          </div>
+          <h3>Seahorse Spotter <span>&rarr;</span></h3>
+          <p>Upload side-profile specimen photos, log standardized water metrics, and sync entries to the live digital spreadsheet.</p>
+        </div>
+
+        <div class="stack-card" onclick="switchPage('impact')">
+          <div class="stack-photo-frame">
+            <img data-local="IMG_0461" data-fallback="https://upload.wikimedia.org/wikipedia/commons/8/87/Hippocampus_hippocampus_%28on_green%29.jpg" alt="Coastal mangrove shoreline" />
+          </div>
+          <h3>Data, Impact &amp; Sites <span>&rarr;</span></h3>
+          <p>3-stage verification audits, seagrass blue carbon (35x faster than rainforests), and our 9-site coastal photo archive.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5-Box Slide-Accurate Summary Strip -->
+    <section class="sand-band">
+      <div class="content-wrap">
+        <h2 class="section-heading">Institutional Foundation &amp; Platform Architecture</h2>
+        <span class="section-sub">Grounded in Project Seahorse &amp; iSeahorse</span>
+        <div class="five-info-grid">
+          <div class="info-box">
+            <h4>Project Seahorse Origins</h4>
+            <p>Founded in 1996 by Dr. Amanda Vincent and Dr. Heather Koldewey as a pioneering partnership between the University of British Columbia and the Zoological Society of London.</p>
+          </div>
+          <div class="info-box">
+            <h4>Conservation Focus</h4>
+            <p>A global marine conservation group dedicated to protecting seahorses, pipefishes, and their shallow-water habitats through fisheries management, trade regulation, and MPAs.</p>
+          </div>
+          <div class="info-box">
+            <h4>Success &amp; Challenges</h4>
+            <p>Established over 35 MPAs globally and led CITES trade policy enforcement, while fighting illegal bottom-trawling in shallow coastal zones and curbing unregulated traditional medicine trade.</p>
+          </div>
+          <div class="info-box">
+            <h4>iSeahorse Launch (2013)</h4>
+            <p>Designed by Project Seahorse as a dedicated digital hub to crowdsource verified sightings from non-academic ocean explorers, backed by academic grants and donors.</p>
+          </div>
+          <div class="info-box">
+            <h4>How iSeahorse Works</h4>
+            <p>Lets divers, snorkelers, and fishers upload photos, GPS coordinates, and species observations via smartphone app or website—kept 100% free via institutional tech backing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vision, Mission & Coastal Photo Collage -->
+    <section class="content-wrap">
+      <div class="two-col-split">
+        <div>
+          <h2 class="section-heading">Vision, Mission &amp; Coastal Scope</h2>
+          <span class="section-sub">The Coastal Seahorse Watch Initiative</span>
+          <p style="margin-bottom: 1rem;">
+            <strong>Vision Statement:</strong> We envision thriving, protected ocean ecosystems where resilient seahorse populations serve as visible indicators of healthy marine life.
+          </p>
+          <p style="margin-bottom: 1rem;">
+            <strong>Mission Statement:</strong> To engage divers, coastal residents, and students in gathering critical ecological data on seahorses to drive community-led habitat protection and marine conservation policy.
+          </p>
+          <p style="margin-bottom: 1.35rem;">
+            <strong>Core Monitoring Focus:</strong> Monitoring shallow-water seahorse populations, tracking seagrass habitat loss, and reducing accidental bycatch from local fisheries across coastal dive hubs, seagrass meadows, mangrove shorelines, estuaries, and rocky reefs.
+          </p>
+          <button class="btn-teal" onclick="switchPage('initiative')">View Full Initiative Blueprint &rarr;</button>
+        </div>
+
+        <div class="collage-2x2">
+          <img data-local="IMG_0338" data-fallback="https://upload.wikimedia.org/wikipedia/commons/3/3e/Hippocampus_guttulatus_01.jpg" alt="Nearshore coastal surf" />
+          <img data-local="IMG_0401" data-fallback="https://upload.wikimedia.org/wikipedia/commons/8/87/Hippocampus_hippocampus_%28on_green%29.jpg" alt="Palm-lined coastal bay" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Hippocampus_erectus_NOAA.jpg" alt="Lined seahorse underwater" />
+          <img data-local="IMG_0442" data-fallback="https://upload.wikimedia.org/wikipedia/commons/f/f1/Hippocampus_zosterae_NOAA.jpg" alt="Sunlit shallow benthic water" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== PAGE 2: PROJECT SEAHORSE ==================== -->
+  <main id="page-foundation" class="page-view">
+    <section class="content-wrap">
+      <h2 class="section-heading">Project Seahorse Conservation Group</h2>
+      <span class="section-sub">Part 1: Institutional Foundation &amp; iSeahorse Digital Ecosystem</span>
+
+      <div class="cards-3" style="margin-bottom: 2rem;">
+        <div class="clean-card">
+          <h3>Origins &amp; Leadership</h3>
+          <p>Founded in 1996 by <strong>Dr. Amanda Vincent</strong> and <strong>Dr. Heather Koldewey</strong>. A pioneering partnership between the <strong>University of British Columbia (UBC)</strong> and the <strong>Zoological Society of London (ZSL)</strong>.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Conservation Focus</h3>
+          <p>A global marine conservation group dedicated to protecting seahorses, pipefishes, and their shallow-water habitats through fisheries management, trade regulation, and <strong>Marine Protected Areas (MPAs)</strong>.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Institutional Funding</h3>
+          <p>Academic research grants, wildlife conservation grants (such as the <strong>Whitley Fund for Nature</strong>), institutional support, corporate sponsors, and private donations.</p>
+        </div>
+      </div>
+
+      <div class="cards-2" style="margin-bottom: 2.5rem;">
+        <div class="clean-card" style="border-top-color: #16a34a;">
+          <h3>Conservation Successes</h3>
+          <p>Successfully established <strong>over 35 Marine Protected Areas (MPAs)</strong> globally. They also led international trade policy enforcement under <strong>CITES</strong> to restrict unsustainable wildlife trade.</p>
+        </div>
+        <div class="clean-card" style="border-top-color: #d97706;">
+          <h3>Ongoing Challenges</h3>
+          <p>The group struggles to enforce bans against <strong>illegal bottom-trawling</strong> in shallow coastal zones and <strong>curbing the unregulated traditional medicine trade</strong>.</p>
+        </div>
+      </div>
+
+      <h3 class="section-heading" style="font-size: 1.55rem;">The iSeahorse Platform Architecture</h3>
+      <span class="section-sub">Crowdsourced Global Citizen Science Hub</span>
+      <div class="cards-3">
+        <div class="clean-card">
+          <h3>Launch (2013)</h3>
+          <p>Designed by Project Seahorse as a dedicated digital hub to crowdsource verified sightings from non-academic ocean explorers.</p>
+        </div>
+        <div class="clean-card">
+          <h3>How It Works</h3>
+          <p>Platform allows divers, snorkelers, and fishers to upload photos, GPS coordinates, and species observations directly through a smartphone app or website.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Technical Backing &amp; Free Access</h3>
+          <p>Maintained with institutional tech partnerships and marine research grants, keeping participation <strong>100% free</strong> to the public.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== PAGE 3: INITIATIVE & GOALS ==================== -->
+  <main id="page-initiative" class="page-view">
+    <section class="content-wrap">
+      <h2 class="section-heading">Initiative Blueprint, SMART Goals &amp; Youth Outreach</h2>
+      <span class="section-sub">Measurable Targets, Risk Mitigation &amp; Seahorse Spotter</span>
+
+      <div class="smart-banner">
+        <div>
+          <h3 style="font-size: 1.55rem; margin-bottom: 0.65rem;">SMART Goals &amp; 10-Year MPA Horizon</h3>
+          <p style="font-size: 0.92rem; color: #e0f4f5; margin-bottom: 0.65rem;">
+            <strong>5-Year Target:</strong> Expand observation network coverage across <strong>20 distinct coastal sectors</strong>.
+          </p>
+          <p style="font-size: 0.92rem; color: #e0f4f5;">
+            <strong>10-Year Target:</strong> Submit crowdsourced data to local governments to legally establish <strong>2 new permanent Marine Protected Areas (MPAs)</strong>.
+          </p>
+        </div>
+        <div class="smart-numbers">
+          <div class="smart-pill">
+            <strong>150</strong>
+            <span>Volunteer Divers Trained (Yr 1)</span>
+          </div>
+          <div class="smart-pill">
+            <strong>300</strong>
+            <span>Verified Sightings Logged (Yr 1)</span>
+          </div>
+          <div class="smart-pill">
+            <strong>5</strong>
+            <span>Pilot Dive Sites Established</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards-2" style="margin-bottom: 2rem;">
+        <div class="clean-card">
+          <h3>3 Primary Project Goals</h3>
+          <ul>
+            <li>Map undocumented seahorse populations and nursery zones along shallow coastal areas and estuaries.</li>
+            <li>Collect standardized environmental data (depth, temperature, substrate type) to assess habitat health.</li>
+            <li>Mobilize students, snorkelers, and beachgoers to contribute verifiable data to marine databases.</li>
+          </ul>
+        </div>
+        <div class="clean-card">
+          <h3>Challenges, Mitigation &amp; Foreseen Successes</h3>
+          <p style="margin-bottom: 0.5rem;"><strong>Identified Risks:</strong> Off-season drop-offs in participation during cold-water months and diver hesitation due to natural camouflage.</p>
+          <p style="margin-bottom: 0.5rem;"><strong>Mitigation Strategy:</strong> Host virtual off-season workshops and cooperative photo-verification badges before data visualization on public maps.</p>
+          <p><strong>Foreseen Successes:</strong> <em>Preventing Nursery Destruction</em> (no-anchor zones against boat anchoring &amp; coastal construction around seagrass beds) and <em>Reducing Local Fishery Bycatch</em> (partnering with regional fishers on low-impact zones).</p>
+        </div>
+      </div>
+
+      <h3 class="section-heading" style="font-size: 1.55rem;">Youth Adaptation: "Seahorse Spotter"</h3>
+      <span class="section-sub">Target Outreach &amp; STEM Engagement</span>
+      <div class="cards-3" style="margin-bottom: 2rem;">
+        <div class="clean-card">
+          <h3>Classroom Modules</h3>
+          <p>Structured STEM curriculum teaching students marine ecology, species identification, and digital data logging concepts.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Shoreline &amp; Tide Pooling</h3>
+          <p>Safe, non-diving field excursions for younger students to conduct shallow tide-pool surveys and coastal debris audits.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Student Clubs</h3>
+          <p>Empowering high school conservation clubs to manage local challenges and lead community advocacy presentations.</p>
+        </div>
+      </div>
+
+      <h3 class="section-heading" style="font-size: 1.55rem;">Funding Architecture &amp; Grant Pathways</h3>
+      <span class="section-sub">Financial Sustainability Plan</span>
+      <div class="cards-3">
+        <div class="clean-card">
+          <h3>Seed Institutional Grants</h3>
+          <p>Initial funding secured through <strong>NOAA Environmental Literacy Grants</strong> and <strong>National Geographic Education Grants</strong>.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Conservation Foundations</h3>
+          <p>Targeting <strong>PADI AWARE Foundation Grants</strong> and <strong>Project Seahorse Research Grants</strong> for specialized dive gear &amp; training kits.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Local Corporate Partners</h3>
+          <p>Long-term sustainability via dive shop sponsorships, aquarium partnerships, and community crowdfunding.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== PAGE 4: SEAHORSE SPOTTER APP & SPREADSHEET ==================== -->
+  <main id="page-spotter" class="page-view">
+    <section class="content-wrap">
+      <h2 class="section-heading">Seahorse Spotter: Photo Upload &amp; Digital Spreadsheet</h2>
+      <span class="section-sub">12-Month Year-Round Baseline &bull; Scuba Divers, Snorkelers, Beachgoers, Fishers &amp; High Schoolers (100% Free)</span>
+
+      <div class="goal-card">
+        <div class="goal-head">
+          <span>Year 1 Citizen Science Sighting Goal Progress</span>
+          <span id="goalCounterText">5 / 300 Sightings Logged (1.7%)</span>
+        </div>
+        <div class="goal-bar-bg">
+          <div id="goalProgressBar" class="goal-bar-fill"></div>
+        </div>
+      </div>
+
+      <div class="spotter-layout">
+        <div class="clean-card">
+          <h3>Log New Seahorse Observation</h3>
+          <p style="font-size: 0.83rem; margin-bottom: 1rem;">
+            <strong>Field Logs:</strong> Timestamps, location coordinates, water parameters, habitat notes, and a clear side-profile photo of each specimen.
+          </p>
+
+          <form id="sightingForm">
+            <div class="form-group">
+              <label for="observerName">Observer / Student Name *</label>
+              <input type="text" id="observerName" class="form-control" placeholder="e.g., Maya Lin (HS Marine Club)" required />
+            </div>
+
+            <div class="form-2col">
+              <div class="form-group">
+                <label for="sightingDate">Timestamp *</label>
+                <input type="datetime-local" id="sightingDate" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label for="speciesSelect">Suspected Species *</label>
+                <select id="speciesSelect" class="form-control" required>
+                  <option value="Lined Seahorse (Hippocampus erectus)">Lined Seahorse (H. erectus)</option>
+                  <option value="Longsnout Seahorse (Hippocampus reidi)">Longsnout Seahorse (H. reidi)</option>
+                  <option value="Dwarf Seahorse (Hippocampus zosterae)">Dwarf Seahorse (H. zosterae)</option>
+                  <option value="Spiny Seahorse (Hippocampus guttulatus)">Spiny Seahorse (H. guttulatus)</option>
+                  <option value="Pacific Seahorse (Hippocampus ingens)">Pacific Seahorse (H. ingens)</option>
+                  <option value="Unidentified / Needs Biologist ID">Unidentified / Needs ID</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="locationCoords">Location &amp; GPS Coordinates *</label>
+              <input type="text" id="locationCoords" class="form-control" placeholder="e.g., Pilot Site #2 — 24.5551° N, 81.7800° W" required />
+            </div>
+
+            <div class="form-2col">
+              <div class="form-group">
+                <label for="waterDepth">Water Depth (m) *</label>
+                <input type="number" step="0.1" min="0" id="waterDepth" class="form-control" placeholder="e.g., 3.5" required />
+              </div>
+              <div class="form-group">
+                <label for="waterTemp">Ambient Temp (°C) *</label>
+                <input type="number" step="0.1" id="waterTemp" class="form-control" placeholder="e.g., 24.8" required />
+              </div>
+            </div>
+
+            <div class="form-2col">
+              <div class="form-group">
+                <label for="habitatType">Substrate Type *</label>
+                <select id="habitatType" class="form-control" required>
+                  <option value="Seagrass Meadow">Seagrass Meadow</option>
+                  <option value="Mangrove Roots">Mangrove Roots</option>
+                  <option value="Coral Reef">Coral Reef</option>
+                  <option value="Artificial Reef / Pier">Artificial Reef / Pier</option>
+                  <option value="Tide Pool / Rocky Shore">Tide Pool / Rocky Shore</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="waterClarity">Water Clarity *</label>
+                <select id="waterClarity" class="form-control" required>
+                  <option value="High (> 10m visibility)">High (&gt; 10m)</option>
+                  <option value="Moderate (4–10m)">Moderate (4–10m)</option>
+                  <option value="Turbid (< 4m)">Turbid (&lt; 4m)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-2col">
+              <div class="form-group">
+                <label for="specimenSize">Est. Size (cm) *</label>
+                <input type="number" step="0.5" min="1" id="specimenSize" class="form-control" placeholder="e.g., 11.5" required />
+              </div>
+              <div class="form-group">
+                <label for="breedingState">Breeding Condition *</label>
+                <select id="breedingState" class="form-control" required>
+                  <option value="Non-brooding / Normal">Non-brooding / Normal</option>
+                  <option value="Pregnant Male (Swollen Pouch)">Pregnant Male (Swollen Pouch)</option>
+                  <option value="Courtship Pair Observed">Courtship Pair Observed</option>
+                  <option value="Juvenile Specimen">Juvenile Specimen</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="photoInput">Side-Profile Specimen Photo *</label>
+              <div class="upload-box" onclick="document.getElementById('photoInput').click()">
+                <strong style="font-size: 0.84rem; color: var(--marine-deep);">Click to Upload Photo (JPG/PNG)</strong>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Used for Stage 1 AI Match &amp; Stage 2 Biologist Audit</p>
+                <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="previewUploadedPhoto(event)" />
+                <img id="photoPreview" alt="Uploaded Seahorse Preview" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldNotes">Habitat &amp; Behavior Notes</label>
+              <textarea id="fieldNotes" rows="2" class="form-control" placeholder="e.g., Anchored by tail to seagrass blade; healthy meadow."></textarea>
+            </div>
+
+            <button type="submit" class="btn-gold" style="width: 100%;">Sync to Digital Spreadsheet</button>
+          </form>
+        </div>
+
+        <div>
+          <div class="clean-card" style="margin-bottom: 1.5rem;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+              <div>
+                <h3 style="margin-bottom: 0.15rem;">Standardized Digital Spreadsheet Log</h3>
+                <span style="font-size: 0.82rem; color: var(--text-muted);">Click <strong>Advance Stage</strong> to move records through the 3-step verification pipeline.</span>
+              </div>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="btn-teal" onclick="loadSampleDemo()">+ Sample Fill</button>
+                <button class="btn-teal" onclick="exportToCSV()">Export CSV</button>
+                <button class="btn-gold" onclick="resetDemoData()">Reset</button>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+              <input type="text" id="searchInput" class="form-control" style="max-width: 220px;" placeholder="Search species, observer..." oninput="renderTable()" />
+              <select id="habitatFilter" class="form-control" style="max-width: 180px;" onchange="renderTable()">
+                <option value="ALL">All Substrates</option>
+                <option value="Seagrass Meadow">Seagrass Meadow</option>
+                <option value="Mangrove Roots">Mangrove Roots</option>
+                <option value="Coral Reef">Coral Reef</option>
+                <option value="Artificial Reef / Pier">Artificial Reef / Pier</option>
+                <option value="Tide Pool / Rocky Shore">Tide Pool / Rocky Shore</option>
+              </select>
+              <select id="stageFilter" class="form-control" style="max-width: 195px;" onchange="renderTable()">
+                <option value="ALL">All Stages</option>
+                <option value="1">Stage 1: AI Match Filter</option>
+                <option value="2">Stage 2: Biologist Audit</option>
+                <option value="3">Stage 3: Public Map Sync</option>
+              </select>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>Timestamp &amp; Observer</th>
+                    <th>Location &amp; Substrate</th>
+                    <th>Species &amp; Specimen</th>
+                    <th>Env. Metrics</th>
+                    <th>Verification</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="spreadsheetBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="cards-3">
+            <div class="clean-card">
+              <h3>Stage 1: AI Match Filter</h3>
+              <p>Uploaded photos pass through machine-learning species recognition to confirm seahorse morphology and flag potential duplicate entries.</p>
+            </div>
+            <div class="clean-card">
+              <h3>Stage 2: Expert Biologist Audit</h3>
+              <p>Marine biologists manually review flagged records, verifying species taxonomy and brood pouch state before approving data.</p>
+            </div>
+            <div class="clean-card">
+              <h3>Stage 3: Public Map Sync</h3>
+              <p>Verified entries publish to public GIS mapping layers, feeding directly into regional conservation policy databases.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== PAGE 5: DATA, IMPACT & COASTAL SITES ==================== -->
+  <main id="page-impact" class="page-view">
+    <section class="content-wrap">
+      <h2 class="section-heading">Analyzing Data, Ecosystem Benefits &amp; Coastal Field Sites</h2>
+      <span class="section-sub">Part 2: Data Evaluation, Seagrass Blue Carbon &amp; All 9 Coastal Field Photographs</span>
+
+      <div class="cards-2" style="margin-bottom: 2rem;">
+        <div class="clean-card" style="border-top-color: #16a34a;">
+          <h3>Results Supporting Project Goals</h3>
+          <p>Consistent multi-dive observations with verified sightings across healthy seagrass beds, paired with sustained volunteer participation mapping active breeding and nursery zones.</p>
+        </div>
+        <div class="clean-card" style="border-top-color: #d97706;">
+          <h3>Results Modifying Project Goals</h3>
+          <p>A steep year-over-year drop in sightings at historically active sites combined with high habitat degradation scores shifts goals from passive population mapping to active habitat restoration and emergency trawling protection lobbying.</p>
+        </div>
+      </div>
+
+      <div class="cards-3" style="margin-bottom: 2.5rem;">
+        <div class="clean-card">
+          <h3>Seagrass Blue Carbon</h3>
+          <p>Seagrass meadows act as massive carbon sinks that absorb carbon <strong>up to 35x faster than tropical rainforests</strong>. Protecting seahorses preserves these vital carbon sinks.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Biodiversity &amp; Nursery Hubs</h3>
+          <p>Seagrass beds serve as critical nurseries for juvenile fish and invertebrates, supporting coastal fisheries and food security while filtering coastal waters and preventing erosion.</p>
+        </div>
+        <div class="clean-card">
+          <h3>Broader Global Knowledge</h3>
+          <p>Fills vital scientific data gaps regarding open-ocean population trends, supporting state, national, and international policy decisions for <strong>Marine Protected Areas (MPAs)</strong>.</p>
+        </div>
+      </div>
+
+      <h3 class="section-heading" style="font-size: 1.55rem;">Coastal Survey &amp; Habitat Field Gallery</h3>
+      <span class="section-sub">All 9 Coastal Habitat Reference Photographs from Your Project Folder</span>
+      <div class="gallery-9">
+        <figure class="gallery-item">
+          <img data-local="IMG_0265" data-fallback="https://upload.wikimedia.org/wikipedia/commons/3/34/Hippocampus_erectus_NOAA.jpg" alt="IMG_0265" />
+          <figcaption><strong>Sector 01 — Rocky Cove &amp; Surf (IMG_0265)</strong>Shallow nearshore transition zone for tide-pool &amp; snorkel surveys.</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img data-local="IMG_0338" data-fallback="https://upload.wikimedia.org/wikipedia/commons/3/3e/Hippocampus_guttulatus_01.jpg" alt="IMG_0338" />
+          <figcaption><strong>Sector 02 — Nearshore Swell Zone (IMG_0338)</strong>Monitoring tidal flushing and shoreline sediment stability.</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img data-local="IMG_0360" data-fallback="https://upload.wikimedia.org/wikipedia/commons/1/1d/Hippocampus_reidi_2.jpg" alt="IMG_0360" />
+          <figcaption><strong>Sector 03 — Open Sandy Bay (IMG_0360)</strong>Monitoring boat traffic and nearshore wave energy buffers.</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img data-local="IMG_0401" data-fallback="https://upload.wikimedia.org/wikipedia/commons/f/f1/Hippocampus_zosterae_NOAA.jpg" alt="IMG_0401" />
+          <figcaption><strong>Sector 04 — Vegetated Shoreline (IMG_0401)</strong>Coastal canopy protecting adjacent shallow nursery waters.</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img data-local="IMG_0418" data-fallback="https://upload.wikimedia.org/wikipedia/commons/b/b1/Hippocampus_ingens_NOAA.jpg" alt="IMG_0418" />
+          <figcaption><strong>Sector 05 — Emerald Lagoon (IMG_0418)</strong>Nutrient-rich sheltered bay supporting dense seagrass beds.</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img data-local="IMG_0432" data-fallback="https://upload.wikimedia.org/wikipedia/commons/8/87/Hippocampus_hippocampus_%28on_green%29.jpg" alt="IMG_0432" />
+          <figcaption><strong>Sector 06 — Headland Overlook (IMG_0432)</strong>Mapping watershed runoff and coastal development boundaries.</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img data-local="IMG_0442" data-fallback="https://upload.wikimedia.org/wikipedia/commons/6/6d/Hippocampus_kuda_01.jpg" alt="IMG_0442" />
+          <figcaption><strong>Sector 07 — Sunlit Benthic Shallows (IMG_0442)</strong>High-clarity shallow benthic zone ideal for photo verification.</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img data-local="IMG_0458" data-fallback="https://upload.wikimedia.org/wikipedia/commons/a/a2/Hippocampus_reidi_2.jpg" alt="IMG_0458" />
+          <figcaption><strong>Sector 08 — Turquoise Flats (IMG_0458)</strong>Prime habitat substrate for Lined and Dwarf seahorse holdfasts.</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img data-local="IMG_0461" data-fallback="https://upload.wikimedia.org/wikipedia/commons/3/34/Hippocampus_erectus_NOAA.jpg" alt="IMG_0461" />
+          <figcaption><strong>Sector 09 — Mangrove Fringe (IMG_0461)</strong>Root systems anchoring sediment and sheltering juvenile seahorses.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="brand-title" style="margin-bottom: 0.65rem;">The Coastal <span>Seahorse</span> Watch</div>
+        <p>Protecting Coastal Habitats Together — empowering everyday citizens to turn local ocean observations into permanent marine conservation policy.</p>
+      </div>
+      <div>
+        <h4>Standardized Field Parameters</h4>
+        <ul>
+          <li><strong>01 Environmental Metrics:</strong> Exact water depth, ambient temperature, water clarity, and substrate type.</li>
+          <li><strong>02 Specimen Documentation:</strong> Side-profile photo, estimated size, breeding condition, and exact timestamp.</li>
+          <li><strong>03 Spreadsheet Logging:</strong> Synced observations with standardized headers and digital validation controls.</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Scientific &amp; Photo Sources</h4>
+        <ul>
+          <li>Project Seahorse (UBC &amp; ZSL) — projectseahorse.org</li>
+          <li>iSeahorse Global Database — projectseahorse.org/iseahorse</li>
+          <li>NOAA Photo Library &amp; Wikimedia Commons Public Domain Archive</li>
+          <li>Coastal Field Survey Photography (IMG_0265 – IMG_0461)</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Automatically resolve .jpg / .JPG / .jpeg extensions for your 9 local folder images
+    function bindLocalFolderImages() {
+      const extensions = [".jpg", ".JPG", ".jpeg", ".JPEG"];
+      document.querySelectorAll("img[data-local]").forEach(img => {
+        const base = img.getAttribute("data-local");
+        const fallback = img.getAttribute("data-fallback");
+        let idx = 0;
+
+        function tryNext() {
+          if (idx < extensions.length) {
+            img.src = base + extensions[idx++];
+          } else if (fallback) {
+            img.onerror = null;
+            img.src = fallback;
+          }
+        }
+
+        img.onerror = tryNext;
+        tryNext();
+      });
+    }
+
+    // Multi-Page Router
+    function switchPage(pageId) {
+      document.querySelectorAll(".page-view").forEach(p => p.classList.remove("active-page"));
+      document.getElementById("page-" + pageId).classList.add("active-page");
+
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-page") === pageId);
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Real Public-Domain Seahorse Photos for Preloaded Sightings
+    const photoErectus = "https://upload.wikimedia.org/wikipedia/commons/3/34/Hippocampus_erectus_NOAA.jpg";
+    const photoReidi = "https://upload.wikimedia.org/wikipedia/commons/1/1d/Hippocampus_reidi_2.jpg";
+    const photoZosterae = "https://upload.wikimedia.org/wikipedia/commons/f/f1/Hippocampus_zosterae_NOAA.jpg";
+    const photoIngens = "https://upload.wikimedia.org/wikipedia/commons/b/b1/Hippocampus_ingens_NOAA.jpg";
+    const photoGuttulatus = "https://upload.wikimedia.org/wikipedia/commons/3/3e/Hippocampus_guttulatus_01.jpg";
+
+    const initialSightings = [
+      {
+        id: 101,
+        observer: "Elena Vance (Lead Diver)",
+        date: "2026-10-14 09:20",
+        location: "Pilot Site #1 — Key Largo Seagrass Flat (25.0865° N, 80.4473° W)",
+        species: "Lined Seahorse (Hippocampus erectus)",
+        size: "12.5 cm",
+        breeding: "Pregnant Male (Swollen Pouch)",
+        depth: "3.2 m",
+        temp: "26.4 °C",
+        habitat: "Seagrass Meadow",
+        clarity: "High (> 10m)",
+        notes: "Anchored to Thalassia testudinum; calm current.",
+        stage: 3,
+        photo: photoErectus
+      },
+      {
+        id: 102,
+        observer: "Marcus Chen (HS Marine Club)",
+        date: "2026-10-19 14:05",
+        location: "Pilot Site #2 — Biscayne Mangrove Edge (25.6080° N, 80.1589° W)",
+        species: "Longsnout Seahorse (Hippocampus reidi)",
+        size: "14.0 cm",
+        breeding: "Non-brooding / Normal",
+        depth: "1.8 m",
+        temp: "25.9 °C",
+        habitat: "Mangrove Roots",
+        clarity: "Moderate (4–10m)",
+        notes: "Yellow morph clinging to red mangrove prop root.",
+        stage: 3,
+        photo: photoReidi
+      },
+      {
+        id: 103,
+        observer: "Sofia Morales (Snorkel Survey)",
+        date: "2026-10-27 11:40",
+        location: "Pilot Site #3 — Cedar Key Estuary (29.1386° N, 83.0351° W)",
+        species: "Dwarf Seahorse (Hippocampus zosterae)",
+        size: "2.8 cm",
+        breeding: "Courtship Pair Observed",
+        depth: "1.2 m",
+        temp: "23.5 °C",
+        habitat: "Seagrass Meadow",
+        clarity: "Moderate (4–10m)",
+        notes: "Pair observed near shallow shoal grass.",
+        stage: 2,
+        photo: photoZosterae
+      },
+      {
+        id: 104,
+        observer: "Liam O'Connor (Youth Spotter)",
+        date: "2026-11-04 15:15",
+        location: "Pilot Site #4 — La Jolla Tide Pool (32.8502° N, 117.2730° W)",
+        species: "Pacific Seahorse (Hippocampus ingens)",
+        size: "15.5 cm",
+        breeding: "Non-brooding / Normal",
+        depth: "0.9 m",
+        temp: "19.8 °C",
+        habitat: "Tide Pool / Rocky Shore",
+        clarity: "High (> 10m)",
+        notes: "Shoreline non-diving observation during low tide.",
+        stage: 2,
+        photo: photoIngens
+      },
+      {
+        id: 105,
+        observer: "Amara Patel (Volunteer Diver)",
+        date: "2026-11-11 10:10",
+        location: "Pilot Site #5 — Blue Heron Bridge (26.7848° N, 80.0436° W)",
+        species: "Spiny Seahorse (Hippocampus guttulatus)",
+        size: "10.0 cm",
+        breeding: "Juvenile Specimen",
+        depth: "4.5 m",
+        temp: "24.6 °C",
+        habitat: "Artificial Reef / Pier",
+        clarity: "High (> 10m)",
+        notes: "Resting near sponge growth on concrete piling.",
+        stage: 1,
+        photo: photoGuttulatus
+      }
+    ];
+
+    let sightings = JSON.parse(localStorage.getItem("csw_sightings_v6")) || [...initialSightings];
+    let currentUploadedPhoto = "";
+
+    function saveSightings() {
+      localStorage.setItem("csw_sightings_v6", JSON.stringify(sightings));
+      updateGoalProgress();
+    }
+
+    function updateGoalProgress() {
+      const count = sightings.length;
+      const pct = Math.min(100, ((count / 300) * 100)).toFixed(1);
+      document.getElementById("goalCounterText").textContent = `${count} / 300 Sightings Logged (${pct}%)`;
+      document.getElementById("goalProgressBar").style.width = `${Math.max(1.7, pct)}%`;
+    }
+
+    function previewUploadedPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        currentUploadedPhoto = e.target.result;
+        const img = document.getElementById("photoPreview");
+        img.src = currentUploadedPhoto;
+        img.style.display = "inline-block";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.getElementById("sightingForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const rawDate = document.getElementById("sightingDate").value;
+      const formattedDate = rawDate ? rawDate.replace("T", " ") : "2026-11-19 08:02";
+
+      const newEntry = {
+        id: Date.now(),
+        observer: document.getElementById("observerName").value.trim(),
+        date: formattedDate,
+        location: document.getElementById("locationCoords").value.trim(),
+        species: document.getElementById("speciesSelect").value,
+        size: document.getElementById("specimenSize").value + " cm",
+        breeding: document.getElementById("breedingState").value,
+        depth: document.getElementById("waterDepth").value + " m",
+        temp: document.getElementById("waterTemp").value + " °C",
+        habitat: document.getElementById("habitatType").value,
+        clarity: document.getElementById("waterClarity").value,
+        notes: document.getElementById("fieldNotes").value.trim() || "Standardized field entry logged.",
+        stage: 1,
+        photo: currentUploadedPhoto || photoErectus
+      };
+
+      sightings.unshift(newEntry);
+      saveSightings();
+      renderTable();
+      this.reset();
+      currentUploadedPhoto = "";
+      document.getElementById("photoPreview").style.display = "none";
+    });
+
+    function advanceStage(id) {
+      const item = sightings.find(s => s.id === id);
+      if (!item) return;
+      item.stage = item.stage < 3 ? item.stage + 1 : 1;
+      saveSightings();
+      renderTable();
+    }
+
+    function getStageBadge(stage) {
+      if (stage === 1) return `<span class="stage-pill s-1">Stage 1: AI Match Filter</span>`;
+      if (stage === 2) return `<span class="stage-pill s-2">Stage 2: Biologist Audit</span>`;
+      return `<span class="stage-pill s-3">Stage 3: Public Map Sync</span>`;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById("spreadsheetBody");
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const habFilter = document.getElementById("habitatFilter").value;
+      const stgFilter = document.getElementById("stageFilter").value;
+
+      const filtered = sightings.filter(s => {
+        const matchesQuery =
+          s.observer.toLowerCase().includes(query) ||
+          s.species.toLowerCase().includes(query) ||
+          s.location.toLowerCase().includes(query);
+        const matchesHab = habFilter === "ALL" || s.habitat === habFilter;
+        const matchesStage = stgFilter === "ALL" || String(s.stage) === stgFilter;
+        return matchesQuery && matchesHab && matchesStage;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 1.5rem; color: #64748b;">No matching sighting records found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(s => `
+        <tr>
+          <td><img src="${s.photo}" alt="Seahorse sighting" class="thumb-img" /></td>
+          <td><strong>${s.date}</strong><br/><span style="color:#4b616c;">${s.observer}</span></td>
+          <td><span>${s.location}</span><br/><span style="font-size:0.78rem; color:#0f7a7c; font-weight:700;">${s.habitat}</span></td>
+          <td><strong>${s.species}</strong><br/><span style="font-size:0.78rem; color:#4b616c;">${s.size} &bull; ${s.breeding}</span></td>
+          <td><span>Depth: <strong>${s.depth}</strong></span><br/><span>Temp: <strong>${s.temp}</strong> (${s.clarity})</span></td>
+          <td>${getStageBadge(s.stage)}</td>
+          <td>
+            <button class="btn-teal" style="padding:0.35rem 0.7rem; font-size:0.76rem;" onclick="advanceStage(${s.id})">
+              ${s.stage < 3 ? "Advance Stage" : "Re-Audit"}
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function loadSampleDemo() {
+      document.getElementById("observerName").value = "Jordan Taylor (Citizen Scientist)";
+      document.getElementById("sightingDate").value = "2026-11-19T08:02";
+      document.getElementById("locationCoords").value = "Pilot Site #1 — Key Largo Seagrass Flat (25.0871° N, 80.4480° W)";
+      document.getElementById("speciesSelect").value = "Lined Seahorse (Hippocampus erectus)";
+      document.getElementById("waterDepth").value = "2.9";
+      document.getElementById("waterTemp").value = "25.4";
+      document.getElementById("habitatType").value = "Seagrass Meadow";
+      document.getElementById("waterClarity").value = "High (> 10m visibility)";
+      document.getElementById("specimenSize").value = "13.0";
+      document.getElementById("breedingState").value = "Pregnant Male (Swollen Pouch)";
+      document.getElementById("fieldNotes").value = "Live demo: healthy seagrass meadow, zero anchor scarring.";
+    }
+
+    function exportToCSV() {
+      const headers = ["ID", "Timestamp", "Observer", "Location_GPS", "Species", "Est_Size", "Breeding_Condition", "Depth", "Ambient_Temp", "Substrate_Type", "Water_Clarity", "Verification_Stage", "Notes"];
+      const rows = sightings.map(s => [
+        s.id,
+        `"${s.date}"`,
+        `"${s.observer.replace(/"/g, '""')}"`,
+        `"${s.location.replace(/"/g, '""')}"`,
+        `"${s.species}"`,
+        `"${s.size}"`,
+        `"${s.breeding}"`,
+        `"${s.depth}"`,
+        `"${s.temp}"`,
+        `"${s.habitat}"`,
+        `"${s.clarity}"`,
+        `"Stage ${s.stage}"`,
+        `"${s.notes.replace(/"/g, '""')}"`
+      ].join(","));
+
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "coastal_seahorse_watch_sightings.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function resetDemoData() {
+      sightings = [...initialSightings];
+      saveSightings();
+      renderTable();
+    }
+
+    bindLocalFolderImages();
+    updateGoalProgress();
+    renderTable();
+  </script>
+</body>
+</html>
